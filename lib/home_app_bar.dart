@@ -30,7 +30,10 @@ class HomeAppBar extends AppBar implements PreferredSizeWidget {
                       print("클릭 됨");
                     },
                     padding: EdgeInsets.zero,
-                    icon: Icon(CupertinoIcons.heart),
+                    icon: Icon(
+                      CupertinoIcons.heart,
+                      color: Colors.lightBlue,
+                    ),
                   ),
                 );
               }),

@@ -51,7 +51,10 @@ class NewsListPage extends StatelessWidget {
                     Positioned(
                       top: 120,
                       left: 120,
-                      child: Icon(CupertinoIcons.heart),
+                      child: Icon(
+                        CupertinoIcons.heart,
+                        color: Colors.lightBlue,
+                      ),
                     )
                   ],
                 ),
