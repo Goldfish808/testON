@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertest/home_app_bar.dart';
 
@@ -38,18 +39,27 @@ class NewsListPage extends StatelessWidget {
                     ],
                   ),
                 ),
-                Container(
-                  width: 150,
-                  height: 150,
-                  child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
-                      child: Image.network('https://picsum.photos/250?image=9', fit: BoxFit.fill)),
+                Stack(
+                  children: [
+                    Container(
+                      width: 150,
+                      height: 150,
+                      child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: Image.network('https://picsum.photos/250?image=9', fit: BoxFit.fill)),
+                    ),
+                    Positioned(
+                      top: 120,
+                      left: 120,
+                      child: Icon(CupertinoIcons.heart),
+                    )
+                  ],
                 ),
               ],
             ),
           ),
           SizedBox(height: 15),
-          Divider(color: Colors.grey, thickness: 2.0),
+          Divider(thickness: 2.0),
         ],
       ),
     );
