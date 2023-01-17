@@ -12,6 +12,7 @@ class ArticlesModel {
   String? urlToImage;
   DateTime? publishedAt;
   String? content;
+  bool? likes = false;
 
   ArticlesModel(
       {this.source,
@@ -21,7 +22,8 @@ class ArticlesModel {
       this.url,
       this.urlToImage,
       this.publishedAt,
-      this.content});
+      this.content,
+      this.likes});
 
   factory ArticlesModel.fromJson(Map<String, dynamic> json) => _$ArticlesModelFromJson(json);
   Map<String, dynamic> toJson() => _$ArticlesModelToJson(this);
