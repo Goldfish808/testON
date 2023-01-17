@@ -1,12 +1,14 @@
 import 'package:json_annotation/json_annotation.dart';
 
+import 'articles_model.dart';
+
 part 'response_dto.g.dart';
 
 @JsonSerializable()
 class ResponseDto {
   final dynamic status;
   final int? totalResults;
-  List<dynamic>? articles;
+  List<ArticlesModel>? articles;
 
   ResponseDto({
     this.status,
@@ -15,8 +17,4 @@ class ResponseDto {
   });
 
   factory ResponseDto.fromJson(Map<String, dynamic> json) => _$ResponseDtoFromJson(json);
-  // ResponseDto.fromJson(Map<String, dynamic> json)
-  //     : status = json["status"],
-  //       totalResults = json["totalResults"],
-  //       articles = json["articles"];
 }

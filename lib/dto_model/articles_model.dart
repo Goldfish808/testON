@@ -24,4 +24,5 @@ class ArticlesModel {
       this.content});
 
   factory ArticlesModel.fromJson(Map<String, dynamic> json) => _$ArticlesModelFromJson(json);
+  Map<String, dynamic> toJson() => _$ArticlesModelToJson(this);
 }

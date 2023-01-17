@@ -1,7 +1,5 @@
-import 'package:json_annotation/json_annotation.dart';
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
-
 import '../dto_model/response_dto.dart';
 
 part 'articles_repository.g.dart';

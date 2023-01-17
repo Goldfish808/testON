@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertest/dto_model/articles_model.dart';
 import 'package:fluttertest/repository/articles_repository.dart';
 
 import 'package:get/get.dart';
@@ -27,12 +28,16 @@ class _NewsListPageState extends State<NewsListPage> {
     articles = ArticlesRepository(dio);
 
     Future.microtask(() async {
-      print("===========");
-      print("여기 까지 오냐");
-      print("===========");
+      //통신코드
       final resp = await articles?.getNews();
 
-      print("씨발 왜 $resp");
+      List<ArticlesModel>? news = resp?.articles;
+      //print("통신이 되냐 ${resp?.articles}");
+      //print("Response DTO 내 Articles 받아오냐(articles_model.dart) ${news}");
+      //Article article = Article(resp?.articles);
+
+      //a = ArticlesModel.fromJson(resp?.articles);
+      //print("파싱 됐나? ${article?.getTitle}");
     });
   }
 
@@ -42,41 +47,70 @@ class _NewsListPageState extends State<NewsListPage> {
     final _deviceHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: HomeAppBar(appBarTitle: "News", context: context),
-      body: Column(
-        children: [
-          buildNewsList(),
-          GetX<CountController>(
-              builder: (_) => Text(
-                    'clicks: ${controller.count}',
-                  )),
-          ElevatedButton(
-            child: Text('Next Route'),
-            onPressed: () {
-              controller.increment();
-            },
-          ),
-        ],
+      body: FutureBuilder(
+        future: articles!.getNews(),
+        initialData: [],
+        builder: (_, AsyncSnapshot snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          print("ResponseDTO 확인하기 ${snapshot.data.articles.length}");
+          final ids = snapshot.data.articles.length;
+
+          return ListView.builder(
+              itemCount: ids,
+              itemBuilder: (_, index) {
+                return FutureBuilder(
+                  future: articles!.getNews(),
+                  builder: (_, AsyncSnapshot snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                    //print("snapshot 확인하기 ${snapshot.data.articles.length}");
+                    return buildNewsList(articlesModel: snapshot.data.articles[index]);
+                  },
+                );
+              });
+        },
       ),
     );
   }
 
-  Widget buildNewsList() {
+  Widget buildNewsList({required ArticlesModel articlesModel}) {
+    print("이미지 확인해보기 ${articlesModel.urlToImage}");
     return Container(
       padding: EdgeInsets.only(left: 20, right: 30, top: 20),
       child: Column(
         children: [
           Container(
-            decoration: BoxDecoration(color: Colors.amber),
             child: Row(
               children: [
                 Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Text("기사 제목"),
-                      Text("기사 내용"),
-                    ],
+                  child: Container(
+                    height: 150,
+                    padding: EdgeInsets.only(right: 20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text(
+                          "기사 제목 ${articlesModel.title}",
+                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 2,
+                        ),
+                        Text(
+                          "기사 내용 ${articlesModel.description}",
+                          style: TextStyle(fontSize: 14),
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 3,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 Stack(
@@ -86,7 +120,7 @@ class _NewsListPageState extends State<NewsListPage> {
                       height: 150,
                       child: ClipRRect(
                           borderRadius: BorderRadius.circular(10),
-                          child: Image.network('https://picsum.photos/250?image=9', fit: BoxFit.fill)),
+                          child: Image.network(articlesModel.urlToImage.toString(), fit: BoxFit.fill)),
                     ),
                     Positioned(
                       top: 120,
