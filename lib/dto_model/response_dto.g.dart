@@ -9,11 +9,10 @@ part of 'response_dto.dart';
 ResponseDto _$ResponseDtoFromJson(Map<String, dynamic> json) => ResponseDto(
       status: json['status'],
       totalResults: json['totalResults'] as int?,
-      articles: json['articles'],
+      articles: json['articles'] as List<dynamic>?,
     );
 
-Map<String, dynamic> _$ResponseDtoToJson(ResponseDto instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$ResponseDtoToJson(ResponseDto instance) => <String, dynamic>{
       'status': instance.status,
       'totalResults': instance.totalResults,
       'articles': instance.articles,

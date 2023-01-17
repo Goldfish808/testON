@@ -6,7 +6,7 @@ part 'response_dto.g.dart';
 class ResponseDto {
   final dynamic status;
   final int? totalResults;
-  dynamic articles;
+  List<dynamic>? articles;
 
   ResponseDto({
     this.status,

@@ -1,22 +1,40 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertest/repository/articles_repository.dart';
 
 import 'package:get/get.dart';
 
 import '../controller/controller.dart';
 import 'components/home_app_bar.dart';
 
-class Second extends StatelessWidget {
-  final CountController ctrl = Get.find();
+class NewsListPage extends StatefulWidget {
+  NewsListPage({Key? key}) : super(key: key);
+
   @override
-  Widget build(context) {
-    return Scaffold(body: Center(child: Text("${ctrl.count}")));
-  }
+  State<NewsListPage> createState() => _NewsListPageState();
 }
 
-class NewsListPage extends StatelessWidget {
-  NewsListPage({Key? key}) : super(key: key);
+class _NewsListPageState extends State<NewsListPage> {
   final controller = Get.put(CountController());
+  ArticlesRepository? articles;
+  @override
+  void initState() {
+    super.initState();
+    Dio dio = Dio();
+
+    articles = ArticlesRepository(dio);
+
+    Future.microtask(() async {
+      print("===========");
+      print("여기 까지 오냐");
+      print("===========");
+      final resp = await articles?.getNews();
+
+      print("씨발 왜 $resp");
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +52,6 @@ class NewsListPage extends StatelessWidget {
           ElevatedButton(
             child: Text('Next Route'),
             onPressed: () {
-              //Get.to(Second());
               controller.increment();
             },
           ),
