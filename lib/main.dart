@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertest/news_list_page.dart';
+
+import 'views/news_list_page.dart';
 
 void main() {
   runApp(const MyApp());

@@ -1,9 +1,22 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertest/home_app_bar.dart';
+
+import 'package:get/get.dart';
+
+import '../controller/controller.dart';
+import 'components/home_app_bar.dart';
+
+class Second extends StatelessWidget {
+  final CountController ctrl = Get.find();
+  @override
+  Widget build(context) {
+    return Scaffold(body: Center(child: Text("${ctrl.count}")));
+  }
+}
 
 class NewsListPage extends StatelessWidget {
-  const NewsListPage({Key? key}) : super(key: key);
+  NewsListPage({Key? key}) : super(key: key);
+  final controller = Get.put(CountController());
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +27,17 @@ class NewsListPage extends StatelessWidget {
       body: Column(
         children: [
           buildNewsList(),
-          buildNewsList(),
+          GetX<CountController>(
+              builder: (_) => Text(
+                    'clicks: ${controller.count}',
+                  )),
+          ElevatedButton(
+            child: Text('Next Route'),
+            onPressed: () {
+              //Get.to(Second());
+              controller.increment();
+            },
+          ),
         ],
       ),
     );
