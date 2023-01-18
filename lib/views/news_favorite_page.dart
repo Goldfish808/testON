@@ -9,6 +9,7 @@ import 'package:fluttertest/views/news_detail_page.dart';
 import 'package:get/get.dart';
 
 import '../controller/controller.dart';
+import '../model/favorites.dart';
 import 'components/home_app_bar.dart';
 
 class NewsFavoritesPage extends StatefulWidget {
@@ -113,17 +114,30 @@ class _NewsFavoritesPageState extends State<NewsFavoritesPage> {
 
   Widget _buildLikesButton({required ArticlesModel articlesModel}) {
     return Positioned(
-      top: 120,
-      left: 120,
-      child: InkWell(
-        child: Icon(
-          (articlesModel.likes == null) || (articlesModel.likes == false)
-              ? CupertinoIcons.heart
-              : CupertinoIcons.heart_fill,
-          color: Colors.lightBlue,
-        ),
-        onTap: () {},
-      ),
-    );
+        top: 120,
+        left: 120,
+        child: (articlesModel.likes == null) || (articlesModel.likes == false)
+            ? InkWell(
+                child: Icon(
+                  CupertinoIcons.heart,
+                  color: Colors.lightBlue,
+                ),
+                onTap: () {
+                  setState(() {
+                    articlesModel.likes = true;
+                  });
+                },
+              )
+            : InkWell(
+                child: Icon(
+                  CupertinoIcons.heart_fill,
+                  color: Colors.lightBlue,
+                ),
+                onTap: () {
+                  setState(() {
+                    articlesModel.likes = false;
+                  });
+                },
+              ));
   }
 }
