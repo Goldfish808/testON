@@ -24,7 +24,7 @@ class HomeAppBar extends AppBar implements PreferredSizeWidget {
               color: Colors.lightBlue,
             ),
             Text(
-              "News",
+              (appBarTitle.toString() == "Details") || (appBarTitle.toString() == "Favorites") ? "News" : "",
               style: TextStyle(fontSize: 18, color: Colors.lightBlue),
             )
           ],

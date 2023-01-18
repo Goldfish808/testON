@@ -17,6 +17,7 @@ class NewsDetailPage extends StatelessWidget {
       body: Container(
         padding: EdgeInsets.all(20),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               "${article.title}",
@@ -28,12 +29,12 @@ class NewsDetailPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Text(
-                    "${DateFormat('yyyy.mm.dd').format(at)}",
+                    "${DateFormat('yyyy.MM.dd').format(at)}",
                     style: TextStyle(
                       color: Colors.grey,
                     ),
                   ),
-                  Text("${article.author}"),
+                  Text(article.author == null ? "작성자 알 수 없음" : "${article.author}"),
                 ],
               ),
             ),
