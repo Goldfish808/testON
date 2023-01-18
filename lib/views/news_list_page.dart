@@ -3,12 +3,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertest/dto_model/articles_model.dart';
+import 'package:fluttertest/model/articles.dart';
 import 'package:fluttertest/repository/articles_repository.dart';
 import 'package:fluttertest/views/news_detail_page.dart';
 
 import 'package:get/get.dart';
 
 import '../controller/controller.dart';
+import '../model/favorites.dart';
 import 'components/home_app_bar.dart';
 
 class NewsListPage extends StatefulWidget {
@@ -21,6 +23,8 @@ class NewsListPage extends StatefulWidget {
 class _NewsListPageState extends State<NewsListPage> {
   final controller = Get.put(CountController());
   ArticlesRepository? articles;
+  List<ArticlesModel> favoritesList = Favorites().favoritesList;
+  List<ArticlesModel> _articlesList = Article().articlesList;
   @override
   void initState() {
     super.initState();
@@ -33,44 +37,28 @@ class _NewsListPageState extends State<NewsListPage> {
       final resp = await articles?.getNews();
 
       List<ArticlesModel>? news = resp?.articles;
+      resp?.articles?.forEach((arti) {
+        print("Favorites 리스트에 담은 후 좋아요 누르기 전 상태: ${arti.title}");
+        _articlesList.add(arti);
+      });
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: HomeAppBar(appBarTitle: "News", context: context),
-      body: FutureBuilder(
-        future: articles!.getNews(),
-        initialData: [],
-        builder: (_, AsyncSnapshot snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-          print("ResponseDTO 확인하기 ${snapshot.data.articles.length}");
-          final ids = snapshot.data.articles.length;
-
-          return ListView.builder(
-              itemCount: ids,
-              itemBuilder: (_, index) {
-                return FutureBuilder(
-                  future: articles!.getNews(),
-                  builder: (_, AsyncSnapshot snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    }
-                    //print("snapshot 확인하기 ${snapshot.data.articles.length}");
-                    return buildNewsList(articlesModel: snapshot.data.articles[index]);
-                  },
+        appBar: HomeAppBar(appBarTitle: "News", context: context),
+        body: ListView.builder(
+            itemCount: _articlesList.length,
+            itemBuilder: (_, index) {
+              if (_articlesList.isEmpty) {
+                return Center(
+                  child: CircularProgressIndicator(),
                 );
-              });
-        },
-      ),
-    );
+              }
+              //print("snapshot 확인하기 ${snapshot.data.articles.length}");
+              return buildNewsList(articlesModel: _articlesList[index]);
+            }));
   }
 
   Widget buildNewsList({required ArticlesModel articlesModel}) {
@@ -145,8 +133,39 @@ class _NewsListPageState extends State<NewsListPage> {
               : CupertinoIcons.heart_fill,
           color: Colors.lightBlue,
         ),
-        onTap: () {},
+        onTap: () {
+          setState(() {
+            if ((articlesModel.likes == null) || (articlesModel.likes == false)) {
+              articlesModel.likes = true;
+              favoritesList.add(articlesModel);
+            } else {
+              articlesModel.likes = false;
+              favoritesList.remove(articlesModel);
+            }
+          });
+        },
       ),
+      // child: (articlesModel.likes == null) || (articlesModel.likes == false)
+      //     ? InkWell(
+      //         child: Icon(
+      //           CupertinoIcons.heart,
+      //           color: Colors.lightBlue,
+      //         ),
+      //         onTap: () {
+      //           articlesModel.likes = true;
+      //           favoritesList.add(articlesModel);
+      //         },
+      //       )
+      //     : InkWell(
+      //         child: Icon(
+      //           CupertinoIcons.heart_fill,
+      //           color: Colors.lightBlue,
+      //         ),
+      //         onTap: () {
+      //           articlesModel.likes = false;
+      //           favoritesList.remove(articlesModel);
+      //         },
+      //       )
     );
   }
 }

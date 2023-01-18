@@ -21,6 +21,7 @@ class NewsFavoritesPage extends StatefulWidget {
 
 class _NewsFavoritesPageState extends State<NewsFavoritesPage> {
   final controller = Get.put(CountController());
+  List<ArticlesModel> favoritesList = Favorites().favoritesList;
   ArticlesRepository? articles;
   @override
   void initState() {
@@ -34,20 +35,15 @@ class _NewsFavoritesPageState extends State<NewsFavoritesPage> {
     return Scaffold(
         appBar: HomeAppBar(appBarTitle: "Favorites", context: context),
         body: ListView.builder(
-            itemCount: 5,
+            itemCount: favoritesList.length,
             itemBuilder: (_, index) {
-              return FutureBuilder(
-                future: articles!.getNews(),
-                builder: (_, AsyncSnapshot snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
-                  //print("snapshot 확인하기 ${snapshot.data.articles.length}");
-                  return buildNewsList(articlesModel: snapshot.data.articles[index]);
-                },
-              );
+              if (favoritesList.isEmpty) {
+                return Center(
+                  child: Text("Favorites Is Empty"),
+                );
+              }
+              //print("snapshot 확인하기 ${snapshot.data.articles.length}");
+              return buildNewsList(articlesModel: favoritesList[index]);
             }));
   }
 
@@ -123,9 +119,8 @@ class _NewsFavoritesPageState extends State<NewsFavoritesPage> {
                   color: Colors.lightBlue,
                 ),
                 onTap: () {
-                  setState(() {
-                    articlesModel.likes = true;
-                  });
+                  articlesModel.likes = true;
+                  favoritesList.add(articlesModel);
                 },
               )
             : InkWell(
@@ -134,9 +129,8 @@ class _NewsFavoritesPageState extends State<NewsFavoritesPage> {
                   color: Colors.lightBlue,
                 ),
                 onTap: () {
-                  setState(() {
-                    articlesModel.likes = false;
-                  });
+                  articlesModel.likes = false;
+                  favoritesList.remove(articlesModel);
                 },
               ));
   }

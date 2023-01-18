@@ -1,8 +1,9 @@
 import '../dto_model/articles_model.dart';
 
 class Article {
-  final ArticlesModel? _article;
+  final ArticlesModel? article;
+  List<ArticlesModel> articlesList = [];
 
-  Article(this._article);
-  get getTitle => _article?.title;
+  Article({this.article});
+  get getTitle => article?.title;
 }
