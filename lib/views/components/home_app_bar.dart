@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../news_favorite_page.dart';
+
 class HomeAppBar extends AppBar implements PreferredSizeWidget {
   HomeAppBar({super.key, required this.context, this.appBarTitle});
   final BuildContext context;
@@ -43,28 +45,44 @@ class HomeAppBar extends AppBar implements PreferredSizeWidget {
 
   @override
   List<Widget>? get actions => [
-        Container(
-          child: Row(
-            children: [
-              Builder(builder: (context) {
-                return Container(
-                  width: 20,
-                  height: 20,
-                  child: IconButton(
-                    onPressed: () {
-                      print("클릭 됨");
-                    },
-                    padding: EdgeInsets.zero,
-                    icon: Icon(
-                      CupertinoIcons.heart,
-                      color: Colors.lightBlue,
+        appBarTitle.toString() == "Favorites"
+            ? Row(
+                children: [
+                  InkWell(
+                    child: Text(
+                      "Delete All",
+                      style: TextStyle(color: Colors.lightBlue, fontSize: 18),
                     ),
                   ),
-                );
-              }),
-              SizedBox(width: 20),
-            ],
-          ),
-        ),
+                  SizedBox(width: 15)
+                ],
+              )
+            : _buildHeartButtonICon(),
       ];
+
+  Widget _buildHeartButtonICon() {
+    return Container(
+      child: Row(
+        children: [
+          Builder(builder: (context) {
+            return Container(
+              width: 20,
+              height: 20,
+              child: IconButton(
+                onPressed: () {
+                  Get.to(() => NewsFavoritesPage());
+                },
+                padding: EdgeInsets.zero,
+                icon: Icon(
+                  CupertinoIcons.heart,
+                  color: Colors.lightBlue,
+                ),
+              ),
+            );
+          }),
+          SizedBox(width: 20),
+        ],
+      ),
+    );
+  }
 }

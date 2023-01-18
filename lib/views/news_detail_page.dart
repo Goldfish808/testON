@@ -10,8 +10,6 @@ class NewsDetailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     DateTime at = DateTime.parse(article.publishedAt.toString());
-
-    print("시간 확인 해보자 ${DateFormat('yyyy.mm.dd').format(at)}");
     return Scaffold(
       appBar: HomeAppBar(context: context, appBarTitle: "Details"),
       body: Container(

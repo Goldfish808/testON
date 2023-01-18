@@ -11,66 +11,43 @@ import 'package:get/get.dart';
 import '../controller/controller.dart';
 import 'components/home_app_bar.dart';
 
-class NewsListPage extends StatefulWidget {
-  NewsListPage({Key? key}) : super(key: key);
+class NewsFavoritesPage extends StatefulWidget {
+  NewsFavoritesPage({Key? key}) : super(key: key);
 
   @override
-  State<NewsListPage> createState() => _NewsListPageState();
+  State<NewsFavoritesPage> createState() => _NewsFavoritesPageState();
 }
 
-class _NewsListPageState extends State<NewsListPage> {
+class _NewsFavoritesPageState extends State<NewsFavoritesPage> {
   final controller = Get.put(CountController());
   ArticlesRepository? articles;
   @override
   void initState() {
     super.initState();
     Dio dio = Dio();
-
     articles = ArticlesRepository(dio);
-
-    Future.microtask(() async {
-      //통신코드
-      final resp = await articles?.getNews();
-
-      List<ArticlesModel>? news = resp?.articles;
-    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: HomeAppBar(appBarTitle: "News", context: context),
-      body: FutureBuilder(
-        future: articles!.getNews(),
-        initialData: [],
-        builder: (_, AsyncSnapshot snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-          print("ResponseDTO 확인하기 ${snapshot.data.articles.length}");
-          final ids = snapshot.data.articles.length;
-
-          return ListView.builder(
-              itemCount: ids,
-              itemBuilder: (_, index) {
-                return FutureBuilder(
-                  future: articles!.getNews(),
-                  builder: (_, AsyncSnapshot snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    }
-                    //print("snapshot 확인하기 ${snapshot.data.articles.length}");
-                    return buildNewsList(articlesModel: snapshot.data.articles[index]);
-                  },
-                );
-              });
-        },
-      ),
-    );
+        appBar: HomeAppBar(appBarTitle: "Favorites", context: context),
+        body: ListView.builder(
+            itemCount: 5,
+            itemBuilder: (_, index) {
+              return FutureBuilder(
+                future: articles!.getNews(),
+                builder: (_, AsyncSnapshot snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                  //print("snapshot 확인하기 ${snapshot.data.articles.length}");
+                  return buildNewsList(articlesModel: snapshot.data.articles[index]);
+                },
+              );
+            }));
   }
 
   Widget buildNewsList({required ArticlesModel articlesModel}) {
