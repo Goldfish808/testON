@@ -97,17 +97,7 @@ class _NewsFavoritesPageState extends State<NewsFavoritesPage> {
                             borderRadius: BorderRadius.circular(10),
                             child: Image.network(articlesModel.urlToImage.toString(), fit: BoxFit.fill)),
                       ),
-                      Positioned(
-                        top: 120,
-                        left: 120,
-                        child: InkWell(
-                          child: Icon(
-                            CupertinoIcons.heart,
-                            color: Colors.lightBlue,
-                          ),
-                          onTap: () {},
-                        ),
-                      )
+                      _buildLikesButton(articlesModel: articlesModel)
                     ],
                   ),
                 ],
@@ -117,6 +107,22 @@ class _NewsFavoritesPageState extends State<NewsFavoritesPage> {
             Divider(thickness: 2.0),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildLikesButton({required ArticlesModel articlesModel}) {
+    return Positioned(
+      top: 120,
+      left: 120,
+      child: InkWell(
+        child: Icon(
+          (articlesModel.likes == null) || (articlesModel.likes == false)
+              ? CupertinoIcons.heart
+              : CupertinoIcons.heart_fill,
+          color: Colors.lightBlue,
+        ),
+        onTap: () {},
       ),
     );
   }
