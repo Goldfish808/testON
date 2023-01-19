@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertest/views/news_favorite_page.dart';
 import 'package:get/get.dart';
 
 import 'views/news_list_page.dart';
@@ -28,6 +29,9 @@ class MyApp extends StatelessWidget {
             50: Color(0xffEBECF0),
           }),
         ),
+        routes: <String, WidgetBuilder>{
+          '/favorite': (BuildContext context) => NewsFavoritesPage(),
+        },
         home: NewsListPage());
   }
 }

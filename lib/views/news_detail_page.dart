@@ -1,17 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertest/dto_model/articles_model.dart';
 import 'package:fluttertest/views/components/home_app_bar.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+
+import '../controller/controller.dart';
 
 class NewsDetailPage extends StatelessWidget {
   NewsDetailPage({Key? key, required this.article}) : super(key: key);
+  final favoriteController = Get.put(CountController());
 
   final ArticlesModel article;
   @override
   Widget build(BuildContext context) {
     DateTime at = DateTime.parse(article.publishedAt.toString());
     return Scaffold(
-      appBar: HomeAppBar(context: context, appBarTitle: "Details"),
+      appBar: HomeAppBar(context: context, appBarTitle: "Details", article: article),
       body: Container(
         padding: EdgeInsets.all(20),
         child: Column(

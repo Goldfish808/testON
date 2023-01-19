@@ -35,16 +35,22 @@ class _NewsFavoritesPageState extends State<NewsFavoritesPage> {
   @override
   Widget build(BuildContext context) {
     print("페이버릿 ${favoriteController.favoritesList.length}");
+    if (favoriteController.favoritesList.length == 0) {
+      return Scaffold(
+        appBar: HomeAppBar(appBarTitle: "Favorites", context: context),
+        body: Center(
+          child: Text(
+            "Favorites Is Empty",
+            style: TextStyle(color: Colors.black, fontSize: 30, decoration: TextDecoration.none),
+          ),
+        ),
+      );
+    }
     return Scaffold(
         appBar: HomeAppBar(appBarTitle: "Favorites", context: context),
         body: ListView.builder(
             itemCount: favoriteController.favoritesList.length,
             itemBuilder: (_, index) {
-              if (favoriteController.favoritesList.isEmpty) {
-                return Center(
-                  child: Text("Favorites Is Empty"),
-                );
-              }
               //print("snapshot 확인하기 ${snapshot.data.articles.length}");
               return buildNewsList(articlesModel: favoriteController.favoritesList[index]);
             }));

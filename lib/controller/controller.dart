@@ -12,6 +12,10 @@ class CountController extends GetxController {
   void derement(value) {
     favoritesList.remove(value);
   }
+
+  void deleteAll() {
+    favoritesList.clear();
+  }
 }
 
 class ReactiveController extends GetxController {
