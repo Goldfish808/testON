@@ -21,7 +21,7 @@ class NewsListPage extends StatefulWidget {
 }
 
 class _NewsListPageState extends State<NewsListPage> {
-  final controller = Get.put(CountController());
+  final favoriteController = Get.put(CountController());
   ArticlesRepository? articles;
   List<ArticlesModel> favoritesList = Favorites().favoritesList;
   List<ArticlesModel> _articlesList = Article().articlesList;
@@ -47,7 +47,7 @@ class _NewsListPageState extends State<NewsListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: HomeAppBar(appBarTitle: "News", context: context),
+        appBar: HomeAppBar(appBarTitle: "News", context: context, favoritesList: favoritesList),
         body: ListView.builder(
             itemCount: _articlesList.length,
             itemBuilder: (_, index) {
@@ -137,10 +137,11 @@ class _NewsListPageState extends State<NewsListPage> {
           setState(() {
             if ((articlesModel.likes == null) || (articlesModel.likes == false)) {
               articlesModel.likes = true;
-              favoritesList.add(articlesModel);
+              favoriteController.increment(articlesModel);
+              print("담겼나? ${favoriteController.favoritesList.length}");
             } else {
               articlesModel.likes = false;
-              favoritesList.remove(articlesModel);
+              favoriteController.derement(articlesModel);
             }
           });
         },

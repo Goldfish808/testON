@@ -2,13 +2,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../dto_model/articles_model.dart';
 import '../news_favorite_page.dart';
 
 class HomeAppBar extends AppBar implements PreferredSizeWidget {
-  HomeAppBar({super.key, required this.context, this.appBarTitle});
+  HomeAppBar({super.key, required this.context, this.appBarTitle, this.favoritesList});
   final BuildContext context;
 
   final String? appBarTitle;
+  List<ArticlesModel>? favoritesList;
 
   @override
   // TODO: implement automaticallyImplyLeading
@@ -70,7 +72,9 @@ class HomeAppBar extends AppBar implements PreferredSizeWidget {
               height: 20,
               child: IconButton(
                 onPressed: () {
-                  Get.to(() => NewsFavoritesPage());
+                  Get.to(() => NewsFavoritesPage(
+                        favoritesList: favoritesList,
+                      ));
                 },
                 padding: EdgeInsets.zero,
                 icon: Icon(

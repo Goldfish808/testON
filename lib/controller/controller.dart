@@ -1,11 +1,16 @@
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 
+import '../dto_model/articles_model.dart';
+
 class CountController extends GetxController {
-  var count = 0.obs;
-  var likes = false.obs;
-  void increment() {
-    count++;
+  List<ArticlesModel> favoritesList = [];
+  void increment(value) {
+    favoritesList.add(value);
+  }
+
+  void derement(value) {
+    favoritesList.remove(value);
   }
 }
 

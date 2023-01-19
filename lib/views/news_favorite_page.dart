@@ -13,14 +13,16 @@ import '../model/favorites.dart';
 import 'components/home_app_bar.dart';
 
 class NewsFavoritesPage extends StatefulWidget {
-  NewsFavoritesPage({Key? key}) : super(key: key);
+  NewsFavoritesPage({Key? key, this.favoritesList}) : super(key: key);
+
+  List<ArticlesModel>? favoritesList;
 
   @override
   State<NewsFavoritesPage> createState() => _NewsFavoritesPageState();
 }
 
 class _NewsFavoritesPageState extends State<NewsFavoritesPage> {
-  final controller = Get.put(CountController());
+  final favoriteController = Get.put(CountController());
   List<ArticlesModel> favoritesList = Favorites().favoritesList;
   ArticlesRepository? articles;
   @override
@@ -32,18 +34,19 @@ class _NewsFavoritesPageState extends State<NewsFavoritesPage> {
 
   @override
   Widget build(BuildContext context) {
+    print("페이버릿 ${favoriteController.favoritesList.length}");
     return Scaffold(
         appBar: HomeAppBar(appBarTitle: "Favorites", context: context),
         body: ListView.builder(
-            itemCount: favoritesList.length,
+            itemCount: favoriteController.favoritesList.length,
             itemBuilder: (_, index) {
-              if (favoritesList.isEmpty) {
+              if (favoriteController.favoritesList.isEmpty) {
                 return Center(
                   child: Text("Favorites Is Empty"),
                 );
               }
               //print("snapshot 확인하기 ${snapshot.data.articles.length}");
-              return buildNewsList(articlesModel: favoritesList[index]);
+              return buildNewsList(articlesModel: favoriteController.favoritesList[index]);
             }));
   }
 
@@ -112,26 +115,25 @@ class _NewsFavoritesPageState extends State<NewsFavoritesPage> {
     return Positioned(
         top: 120,
         left: 120,
-        child: (articlesModel.likes == null) || (articlesModel.likes == false)
-            ? InkWell(
-                child: Icon(
-                  CupertinoIcons.heart,
-                  color: Colors.lightBlue,
-                ),
-                onTap: () {
-                  articlesModel.likes = true;
-                  favoritesList.add(articlesModel);
-                },
-              )
-            : InkWell(
-                child: Icon(
-                  CupertinoIcons.heart_fill,
-                  color: Colors.lightBlue,
-                ),
-                onTap: () {
-                  articlesModel.likes = false;
-                  favoritesList.remove(articlesModel);
-                },
-              ));
+        child: InkWell(
+          child: Icon(
+            (articlesModel.likes == null) || (articlesModel.likes == false)
+                ? CupertinoIcons.heart
+                : CupertinoIcons.heart_fill,
+            color: Colors.lightBlue,
+          ),
+          onTap: () {
+            setState(() {
+              if ((articlesModel.likes == null) || (articlesModel.likes == false)) {
+                articlesModel.likes = true;
+                favoriteController.increment(articlesModel);
+                print("담겼나? ${favoriteController.favoritesList.length}");
+              } else {
+                articlesModel.likes = false;
+                favoriteController.derement(articlesModel);
+              }
+            });
+          },
+        ));
   }
 }
